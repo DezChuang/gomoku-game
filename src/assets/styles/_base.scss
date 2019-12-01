@@ -1,17 +1,9 @@
-*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: inherit;
-}
-
 html {
   font-size: $base-font-size;
 }
 
 body {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'PingFangTC-Regular', '微軟粗黑體', 'Arial', sans-serif;
   box-sizing: border-box;
   color: #2c3e50;
 }
