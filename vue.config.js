@@ -8,5 +8,6 @@ module.exports = {
   devServer: {
     port: 5566,
     disableHostCheck: true
-  }
+  },
+  publicPath: './'
 }
