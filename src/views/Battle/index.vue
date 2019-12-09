@@ -29,45 +29,84 @@
 </template>
 
 <script>
-  export default {
-    name: 'Battle',
-    data() {
+export default {
+  name: 'Battle',
+  data() {
+    return {
+      playData: [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ],
+      turn: 1
+    }
+  },
+  methods: {
+    getTransform(x, y) {
       return {
-        playData: [
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ],
-        turn: 1
+        transform: `translate(${-285 + 38 * x}px, ${-305 + 38 * y}px)`
       }
     },
-    methods: {
-      getTransform(x, y) {
-        return {
-          transform: `translate(${-285 + 38 * x}px, ${-305 + 38 * y}px)`
+    handleGo(x, y) {
+      if (this.playData[x][y] !== 0) return
+      const newRow = this.playData[x].slice(0)
+      newRow[y] = this.turn
+      this.$set(this.playData, x, newRow)
+      this.turn = this.turn === 1 ? 2 : 1
+      console.log(x)
+      console.log(y)
+      console.log('==')
+      this.checkWinner()
+    },
+    checkWinner() {
+      const data = this.playData
+      for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 15; j++) {
+          if (i > 10 || j > 10) continue
+          const winCase1 =
+            (data[i][j] === data[i][j + 1] &&
+              data[i][j] === data[i][j + 2] &&
+              data[i][j] === data[i][j + 3] &&
+              data[i][j] === data[i][j + 4]) ||
+            (data[i][j] === data[i + 1][j] &&
+              data[i][j] === data[i + 2][j] &&
+              data[i][j] === data[i + 3][j] &&
+              data[i][j] === data[i + 4][j]) ||
+            (data[i][j] === data[i + 1][j + 1] &&
+              data[i][j] === data[i + 2][j + 2] &&
+              data[i][j] === data[i + 3][j + 3] &&
+              data[i][j] === data[i + 4][j + 4])
+          let winCase2 = false
+          if (i > 3 && j < 11) {
+            winCase2 =
+              data[i][j] === data[i - 1][j + 1] &&
+              data[i][j] === data[i - 2][j + 2] &&
+              data[i][j] === data[i - 3][j + 3] &&
+              data[i][j] === data[i - 4][j + 4]
+          }
+          if (!(winCase1 || winCase2)) continue
+          if (data[i][j] === 1) {
+            console.warn('black win!')
+          } else if (data[i][j] === 2) {
+            console.warn('white win!')
+          }
         }
-      },
-      handleGo(x, y) {
-        if (this.playData[x][y] !== 0) return
-        const newRow = this.playData[x].slice(0)
-        newRow[y] = this.turn
-        this.$set(this.playData, x, newRow)
-        this.turn = this.turn === 1 ? 2 : 1
       }
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
